@@ -22,6 +22,8 @@ define('SUBSCRIPTION_TABLE', $wpdb->prefix.'mist_readers');
 
 // Add wordpress action hooks
 register_activation_hook(__FILE__, "check_table");
+add_action("user_register", "MUS_user_register");
+add_action("delete_user", "MUS_user_delete");
 
 // admin hooks
 add_action("edit_user_profile", "MUS_show_fields_admin");
@@ -29,6 +31,28 @@ add_action("edit_user_profile_update", "MUS_save_fields");
 
 // general user hooks
 add_action("profile_personal_options", "MUS_show_fields_user");
+
+/*
+  add row in MUS table when user is created
+*/
+function MUS_user_register($user_id) {
+  global $wpdb;
+  $wpdb->insert(
+    SUBSCRIPTION_TABLE,
+    array(
+      'user_id' => $user_id
+    )
+  );
+}
+
+/*
+  add delete rom from MUS table when user is deleted
+*/
+function MUS_user_delete($user_id) {
+  global $wpdb;
+  $wpdb->query($wpdb->prepare("DELETE FROM ".SUBSCRIPTION_TABLE."
+    WHERE user_id = %d",$user_id));
+}
 
 /*
   create table if it does not exist, add users to that table.
@@ -115,9 +139,10 @@ function MUS_show_fields_user($user) {
   update profile by admin
 */
 function MUS_save_fields($user_id) {
-  global $wpdb, $current_user,
-  $newSubscriptionSubject,
-  $updateSubscriptionSubject;
+  global $wpdb;
+  global $current_user;
+  global $newSubscriptionSubject;
+  global $updateSubscriptionSubject;
 
   // get user info
   $user = get_userdata($user_id);
