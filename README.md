@@ -7,4 +7,4 @@ Note: the plugin does just what it says above, and it's up to you to use the dat
 * Log every change
 * Add jQuery UI Datepicker (now it's just input[type="date"])
 
-## License: GPL http://www.gnu.org/licenses/gpl.html
+## License: MIT http://opensource.org/licenses/MIT
