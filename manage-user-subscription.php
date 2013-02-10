@@ -156,12 +156,14 @@ function MUS_save_fields($user_id) {
     case 'new_subscription':
       $message = $_POST['email_for_new_subscription'];
       $message = str_replace($customFields, $userCustomFields, $message);
-      wp_mail($current_user->user_email, $newSubscriptionSubject, $message, $headers);
+      wp_mail($user->user_email, $newSubscriptionSubject, $message, $headers);
+      wp_mail($current_user->user_email, 'For admin: '.$newSubscriptionSubject, $message, $headers);
       break;
     case 'update_subscription':
       $message = $_POST['email_for_update_subscription'];
       $message = str_replace($customFields, $userCustomFields, $message);
-      wp_mail($current_user->user_email, $updateSubscriptionSubject, $message, $headers);
+      wp_mail($user->user_email, $updateSubscriptionSubject, $message, $headers);
+      wp_mail($current_user->user_email, 'For admin: '.$updateSubscriptionSubject, $message, $headers);
       break;
     
     default:
